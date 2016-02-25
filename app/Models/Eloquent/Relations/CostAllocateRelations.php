@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Models\Relations;
+namespace App\Models\Eloquent\Relations;
 
-use App\Models\ItemOrder;
+use App\Models\Eloquent\ItemOrder;
 use Illuminate\Database\Eloquent\Model;
 
 class CostAllocateRelations extends Model

@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Eloquent;
 
-use App\Models\Relations\PartnerRelations;
-use App\Models\Traits\GridSortingTrait;
-use App\Models\Traits\MandanteTrait;
-use App\Models\Traits\SyncItemsTrait;
+use App\Models\Eloquent\Relations\PartnerRelations;
+use App\Models\Eloquent\Traits\GridSortingTrait;
+use App\Models\Eloquent\Traits\MandanteTrait;
+use App\Models\Eloquent\Traits\SyncItemsTrait;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\SoftDeletes;
 

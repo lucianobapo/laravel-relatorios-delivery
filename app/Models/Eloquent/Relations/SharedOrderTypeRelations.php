@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Models\Relations;
+namespace App\Models\Eloquent\Relations;
 
-use App\Models\Order;
+use App\Models\Eloquent\Order;
 use Illuminate\Database\Eloquent\Model;
 
 class SharedOrderTypeRelations extends Model

@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Eloquent;
 
-use App\Models\Relations\ItemOrderRelations;
-use App\Models\Traits\MandanteTrait;
+use App\Models\Eloquent\Relations\ItemOrderRelations;
+use App\Models\Eloquent\Traits\MandanteTrait;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class ItemOrder extends ItemOrderRelations

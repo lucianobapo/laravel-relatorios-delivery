@@ -159,6 +159,9 @@ return [
         Collective\Html\HtmlServiceProvider::class,
         Barryvdh\Debugbar\ServiceProvider::class,
 
+        Prettus\Repository\Providers\RepositoryServiceProvider::class,
+        LaravelDoctrine\ORM\DoctrineServiceProvider::class,
+
     ],
 
     /*
@@ -208,6 +211,8 @@ return [
         'Form' => Collective\Html\FormFacade::class,
         'Html' => Collective\Html\HtmlFacade::class,
         'Debugbar' => Barryvdh\Debugbar\Facade::class,
+
+        'EntityManager' => LaravelDoctrine\ORM\Facades\EntityManager::class,
 
     ],
 

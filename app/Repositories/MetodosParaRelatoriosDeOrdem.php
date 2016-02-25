@@ -8,18 +8,27 @@
 
 namespace App\Repositories;
 
+use App\ModelLayer\Repositories\OrderRepositoryInterface;
+use App\Models\Eloquent\CostAllocate;
+use App\Models\Eloquent\Order;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
 //use Symfony\Component\DomCrawler\Form;
 
 class MetodosParaRelatoriosDeOrdem
 {
-    public function __construct()
+    /**
+     * @var OrderRepositoryInterface
+     */
+    private $repository;
+
+    public function __construct(OrderRepositoryInterface $repository)
     {
-        \Html::component('lbpTable', 'components.table', ['name', 'value' => null, 'attributes' => [], 'matriz' => [], 'somaMatriz' => 0]);
-        \Html::component('appMain', 'components.appMain', ['content']);
+        $this->repository = $repository;
+//        dd($this->repository);
     }
 
-    public function arrayDosCustos(Collection &$collection)
+    protected function arrayDosCustos(Collection &$collection)
     {
         $result = [];
         foreach($collection as $cost){
@@ -28,19 +37,8 @@ class MetodosParaRelatoriosDeOrdem
         return $result;
     }
 
-    public function arrayValoresDeOrdemDeVendaPorCusto()
+    protected function arrayDeSomaDosItens(Collection $Orders)
     {
-        return [];
-    }
-
-    public function arrayDeSomaDosItens(Collection $Orders)
-    {
-//        $result = [];
-//        foreach ($ItemOrders as $itemOrder) {
-//            if (isset($itemOrder->order->type_id)){
-//                $result[$itemOrder->cost->nome] = ($itemOrder->valor_unitario+$itemOrder->quantidade) + (isset($result[$itemOrder->cost->nome])?$result[$itemOrder->cost->nome]:0);
-//            }
-//        }
         $sum2 = [];
         foreach ($Orders as $order) {
             foreach ($order->orderItems as $orderItem) {
@@ -53,44 +51,68 @@ class MetodosParaRelatoriosDeOrdem
         return $sum2;
     }
 
-    public function tabelaValoresDeOrdemDeVendaPorCusto(array $valores=[], array $titulos=[])
+    protected function tabelaValoresDeOrdemDeVendaPorCusto(array $valores=[], array $titulos=[])
     {
-//        \Debugbar::info($valores);
-        if ($this->itensVazios()) {
-            $somaMatriz = [];
-            foreach ($titulos as $nome => $descricao) {
-                $matriz[$nome]['nomes'] = $descricao;
-            }
-            foreach ($valores as $nomeDoCusto => $arrayDeOrdensEValores) {
-                foreach ($arrayDeOrdensEValores as $keyTipoOrdem => $valor) {
-                    $matriz[$nomeDoCusto][$keyTipoOrdem] = $valor;
-                    $somaMatriz[$keyTipoOrdem] =  (isset($somaMatriz[$keyTipoOrdem]))?$somaMatriz[$keyTipoOrdem]+$valor:$valor;
-                }
-
-            }
-//            \Debugbar::info($matriz);
-//            \Debugbar::info($somaMatriz);
-//            $somaMatriz = array_sum($valores);
-//            dd($somaMatriz);
-//            $matriz = [
-//                'linha1' => [
-//                    'coluna1' => 'linha1xcoluna1',
-//                    'coluna2' => 'linha1xcoluna2',
-//                ],
-//                'linha2' => [
-//                    'coluna1' => 'linha2xcoluna1',
-//                    'coluna2' => 'linha2xcoluna2',
-//                ],
-//            ];
-//            $content =
-               return \Html::lbpTable('first_name', null, [], $matriz, $somaMatriz);
-//            return \Html::appMain($content);
-//            return 'Sem itens para exibir';
+        $somaMatriz = [];
+        foreach ($titulos as $nome => $descricao) {
+            $matriz[$nome]['nomes'] = $descricao;
         }
+        foreach ($valores as $nomeDoCusto => $arrayDeOrdensEValores) {
+            foreach ($arrayDeOrdensEValores as $keyTipoOrdem => $valor) {
+                $matriz[$nomeDoCusto][$keyTipoOrdem] = $valor;
+                $somaMatriz[$keyTipoOrdem] =  (isset($somaMatriz[$keyTipoOrdem]))?$somaMatriz[$keyTipoOrdem]+$valor:$valor;
+            }
+        }
+        return ([
+            'matriz'=>$matriz,
+            'somaMatriz'=>$somaMatriz,
+        ]);
     }
 
-    private function itensVazios()
+    public function arrayDosPeriodos()
     {
-        return true;
+        $CostAllocates = (new CostAllocate)
+            ->orderBy('numero')
+            ->get();
+        $arrayDosCustos = $this->arrayDosCustos($CostAllocates);
+
+        $carbon = new Carbon;
+        $Orders = $this->repository->collectionOrdersItemsCosts();
+//        $Orders = (new Order)->with('orderItems','orderItems.cost')->get();
+        $countMes = 0;
+        $arr=[];
+        do {
+            $comecoDoMes = $carbon->now()->subMonths($countMes)->firstOfMonth();
+            $fimDoMes = $carbon->now()->subMonths($countMes)->endOfMonth();
+            $OrdersFiltred = $Orders
+                ->filter(function($item) use ($comecoDoMes, $fimDoMes) {
+                    if ($item->posted_at_carbon>=$comecoDoMes && $item->posted_at_carbon<=$fimDoMes){
+                        return $item;
+                    }
+                });
+
+            if (count($OrdersFiltred)>0) {
+                $arr[$comecoDoMes->timestamp] = array_merge(
+                    ['titulo' => $comecoDoMes->format('F Y')],
+                    $this->tabelaValoresDeOrdemDeVendaPorCusto(
+                        $this->arrayDeSomaDosItens($OrdersFiltred),
+                        $arrayDosCustos
+                    ));
+            }
+            $countMes++;
+        } while ( (count($OrdersFiltred)>0) || ($countMes<2));
+
+        $antes = 0;
+        foreach ($arr as $key => $value) {
+            if ($antes == 0) $antes = $key;
+            else {
+                $arr[$antes]['depois']=$key;
+                $arr[$key]['antes']=$antes;
+                $antes = $key;
+            }
+        }
+
+        reset($arr);
+        return $arr;
     }
 }

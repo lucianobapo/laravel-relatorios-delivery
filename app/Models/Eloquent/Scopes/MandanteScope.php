@@ -1,4 +1,6 @@
-<?php namespace App\Models\Scopes;
+<?php
+
+namespace App\Models\Eloquent\Scopes;
 
 use Illuminate\Database\Eloquent\Scope;
 use Illuminate\Database\Query\Builder as BaseBuilder;

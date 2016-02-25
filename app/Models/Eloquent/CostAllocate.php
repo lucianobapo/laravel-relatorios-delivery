@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Eloquent;
 
-use App\Models\Relations\CostAllocateRelations;
-use App\Models\Traits\GridSortingTrait;
-use App\Models\Traits\MandanteTrait;
+use App\Models\Eloquent\Relations\CostAllocateRelations;
+use App\Models\Eloquent\Traits\GridSortingTrait;
+use App\Models\Eloquent\Traits\MandanteTrait;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class CostAllocate extends CostAllocateRelations

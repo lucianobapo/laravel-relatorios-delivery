@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Eloquent;
 
-use App\Models\Relations\OrderRelations;
-use App\Models\Traits\MandanteTrait;
+use App\Models\Eloquent\Relations\OrderRelations;
+use App\Models\Eloquent\Traits\MandanteTrait;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\SoftDeletes;
 

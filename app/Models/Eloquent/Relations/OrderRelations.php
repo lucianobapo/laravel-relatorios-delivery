@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Models\Relations;
+namespace App\Models\Eloquent\Relations;
 
-use App\Models\ItemOrder;
-use App\Models\Partner;
-use App\Models\SharedOrderType;
+use App\Models\Eloquent\ItemOrder;
+use App\Models\Eloquent\Partner;
+use App\Models\Eloquent\SharedOrderType;
 use Illuminate\Database\Eloquent\Model;
 
 class OrderRelations extends Model

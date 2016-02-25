@@ -1,6 +1,6 @@
-<?php namespace App\Models;
+<?php namespace App\Models\Eloquent;
 
-use App\Models\Relations\SharedOrderTypeRelations;
+use App\Models\Eloquent\Relations\SharedOrderTypeRelations;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class SharedOrderType extends SharedOrderTypeRelations {

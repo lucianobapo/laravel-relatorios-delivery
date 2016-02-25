@@ -78,7 +78,7 @@
         <script id="templates/{{ $timestamp }}.html" type="text/ng-template">
             <ion-view view-title="{{ $conteudo['titulo'] }}">
                 <ion-content class="padding">
-                    {{ $conteudo['tabela'] }}
+                    @include('components.table', ['matriz'=>$conteudo['matriz'],'somaMatriz'=>$conteudo['somaMatriz']])
                     <p>
                         <a class="button icon ion-home" href="#/tab/home"> Home</a>
                         @if(isset($conteudo['depois']))

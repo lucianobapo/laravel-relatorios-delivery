@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Models\Traits;
+namespace App\Models\Eloquent\Traits;
 
-use App\Models\Scopes\MandanteScope;
+use App\Models\Eloquent\Scopes\MandanteScope;
 use Illuminate\Support\Facades\Auth;
 
 trait MandanteTrait
