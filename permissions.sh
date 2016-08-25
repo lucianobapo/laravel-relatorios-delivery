@@ -26,3 +26,17 @@ find bootstrap/cache/ -type d -exec chmod g+s {} \;
 
 setfacl -dR -m u::rwx bootstrap/cache/
 setfacl -dR -m g::rwx bootstrap/cache/
+
+#fix to View cache files
+chgrp www-data -R storage/framework/views/
+chmod -R ug+w storage/framework/views/
+chmod -R o-w storage/framework/views/
+
+find storage/framework/views/ -type f -exec chmod ugo-x {} \;
+find storage/framework/views/ -type d -exec chmod ugo+x {} \;
+
+find storage/framework/views/ -type f -exec chmod g-s {} \;
+find storage/framework/views/ -type d -exec chmod g+s {} \;
+
+setfacl -dR -m u::rwx storage/framework/views/
+setfacl -dR -m g::rwx storage/framework/views/
