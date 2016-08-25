@@ -74,10 +74,12 @@ class MetodosParaRelatoriosDeOrdem
         $CostAllocates = (new CostAllocate)
             ->orderBy('numero')
             ->get();
+//        dd($CostAllocates);
         $arrayDosCustos = $this->arrayDosCustos($CostAllocates);
-
+//        dd($arrayDosCustos);
         $carbon = new Carbon;
         $Orders = $this->repository->collectionOrdersItemsCosts();
+//        dd($Orders);
 //        $Orders = (new Order)->with('orderItems','orderItems.cost')->get();
         $countMes = 0;
         $arr=[];
@@ -86,10 +88,15 @@ class MetodosParaRelatoriosDeOrdem
             $fimDoMes = $carbon->now()->subMonths($countMes)->endOfMonth();
             $OrdersFiltred = $Orders
                 ->filter(function($item) use ($comecoDoMes, $fimDoMes) {
+//                    dd($item->posted_at_carbon);
                     if ($item->posted_at_carbon>=$comecoDoMes && $item->posted_at_carbon<=$fimDoMes){
+//                        dd($item);
                         return $item;
                     }
                 });
+//            dd($fimDoMes);
+//            dd($comecoDoMes);
+//            dd($OrdersFiltred);
 
             if (count($OrdersFiltred)>0) {
                 $arr[$comecoDoMes->timestamp] = array_merge(
@@ -100,7 +107,7 @@ class MetodosParaRelatoriosDeOrdem
                     ));
             }
             $countMes++;
-        } while ( (count($OrdersFiltred)>0) || ($countMes<2));
+        } while ( (count($OrdersFiltred)>0) || ($countMes<4));
 
         $antes = 0;
         foreach ($arr as $key => $value) {
