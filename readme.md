@@ -1,7 +1,7 @@
 ## Laravel PHP Framework
 
 ssh 104.197.251.61
-rsync -rvztPhe ssh /home/luciano/Code/laravel-relatorios-delivery/.env 104.197.251.61:code/laravel-relatorios-delivery/.env
+rsync -rvztPhe ssh /home/luciano/Code/laravel-relatorios-delivery/.env.production 104.197.251.61:code/laravel-relatorios-delivery/.env
 
 [![Build Status](https://travis-ci.org/laravel/framework.svg)](https://travis-ci.org/laravel/framework)
 [![Total Downloads](https://poser.pugx.org/laravel/framework/d/total.svg)](https://packagist.org/packages/laravel/framework)
